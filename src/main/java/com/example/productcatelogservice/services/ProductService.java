@@ -15,6 +15,8 @@ import org.springframework.web.client.ResponseExtractor;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.List;
+
 @Service
 public class ProductService implements IProductService {
     private RestTemplateBuilder restTemplateBuilder;
@@ -51,6 +53,21 @@ public class ProductService implements IProductService {
                 fakeStoreProductDtoResponseEntity.getStatusCode().equals(HttpStatus.valueOf(200))) {
             return from(fakeStoreProductDtoResponseEntity.getBody());
         }
+        return null;
+    }
+
+    @Override
+    public List<Product> getAllProducts() {
+        return List.of();
+    }
+
+    @Override
+    public void deleProduct(Long id) {
+
+    }
+
+    @Override
+    public Product createProduct(Product product) {
         return null;
     }
 

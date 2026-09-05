@@ -4,6 +4,8 @@ import com.example.productcatelogservice.dtos.CategoryDto;
 import com.example.productcatelogservice.dtos.ProductDto;
 import com.example.productcatelogservice.models.Category;
 import com.example.productcatelogservice.models.Product;
+import com.example.productcatelogservice.repo.ProductRepo;
+import com.example.productcatelogservice.services.IProductService;
 import com.example.productcatelogservice.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,11 +13,15 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 @RestController
 public class ProductController {
 
     @Autowired
-    ProductService productService;
+    IProductService productService;
 
     @GetMapping("/products/{id}")
     public ResponseEntity<ProductDto> getProductById(@PathVariable("id") Long productId) {
@@ -38,6 +44,36 @@ public class ProductController {
         return new ResponseEntity<>(productDto, HttpStatus.OK);
 
     }
+
+    @PostMapping("/products")
+    public ResponseEntity<ProductDto> createProduct(@RequestBody ProductDto productDto) {
+        Product product = from(productDto);
+        Product productOutput = productService.createProduct(product);
+        ProductDto productDtoOutput = from(productOutput);
+        return new ResponseEntity<>(productDtoOutput, HttpStatus.OK);
+
+    }
+
+    @GetMapping("/products")
+    public ResponseEntity<List<ProductDto>> getAllProducts() {
+        List<Product> products = productService.getAllProducts();
+        List<ProductDto> productDtos = new ArrayList<>();
+
+        for (Product product : products) {
+            productDtos.add(from(product));
+        }
+
+        return new ResponseEntity<>(productDtos, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/products/{id}")
+    public ResponseEntity<Void> deleteProduct(@PathVariable("id") Long productId) {
+        if(productId <= 0L)
+            throw new IllegalArgumentException("Pass valid id");
+        productService.deleProduct(productId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
 
     private Product from(ProductDto productDto) {
         Product product = new Product();
