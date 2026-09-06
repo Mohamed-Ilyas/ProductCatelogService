@@ -1,0 +1,7 @@
+FetchType    FetchMode   When Asked For Products (Queries)          When NOT Asked For Products (Queries)
+LAZY         SELECT      2 SELECT queries                           1 SELECT query
+EAGER        SELECT      2 SELECT queries                           2 SELECT queries
+LAZY         JOIN        1 JOIN query                               1 JOIN query
+EAGER        JOIN        1 JOIN query                               1 JOIN query
+LAZY         SUBSELECT   2 SELECT queries                           1 SELECT query
+EAGER        SUBSELECT   2 SELECT queries                           2 SELECT queries
